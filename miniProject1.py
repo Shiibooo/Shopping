@@ -16,6 +16,8 @@ user_shopping_list_dict={}
 #boolean to check for discount
 discount = False
 
+user_shopping_list = []
+total_price=[]
 print("#########################")
 print("##### SHOPPING LIST #####")
 print("#########################")
@@ -23,11 +25,11 @@ print("#########################")
 #main
 def main():
     print("\nPlease input the number of the action that you would like to do.")
-    print("1. View shopping list" '\n' 
-          "2. Add item to shopping cart" '\n' 
-          "3. Remove item from shopping cart" '\n' 
-          "4. View your shopping cart" '\n' 
-          "5. Go to checkout" '\n' 
+    print("1. View shopping list" '\n'
+          "2. Add item to shopping cart" '\n'
+          "3. Remove item from shopping cart" '\n'
+          "4. View your shopping cart" '\n'
+          "5. Go to checkout" '\n'
           "6. Exit\n")
     #get input
     action = int(input("Please input the action number: "))
@@ -63,9 +65,9 @@ def action1():
     displayOption =input("Please input C for category, A for alphabetical order and P for ascending price:")
     if displayOption == 'c':
         action1_category()
-        main()
+        exitToMain()
     else:
-        main()
+        exitToMain()
 
 #print out items based on category
 def action1_category():
@@ -112,48 +114,44 @@ def action2():
 
     global qlist
     qlist=[]
+    i = 0;
     while True:
-        num=input('Key the number of the item you would like to get [item (no.)]: ')
+        num=input('Key the number of the item you would like to get: ')
         global q
-        q=int(input('Key the number of the items you would like: '))
-        user_shopping_list_dict.append('{} x {}'.format(q,num))
+        q=int(input('Key the number of the items you would like:'))
+        #user_shopping_list.append('{} x {}'.format(q,num))
+        for i in range (q):
+            user_shopping_list.append(num)
         total_price.append(q*shopping_menu.get(num))
+        #print(user_shopping_list_dict)
         choice=input('Would you like to add more things to your cart?(y/n) ')
         if choice == 'y':
-            action4()
+            action2()
             continue
         elif choice == 'n':
-            main()
+            exitToMain()
             #break
 
 #Remove items
 def action3():
+    for x in range (len(user_shopping_list)):
+        print(x+1, user_shopping_list[x], "price:",  shopping_menu[user_shopping_list[x]])
+    print('\nBe warned that all quantities of the item would be removed\n')
+    delete=int(input('Key in the number that you would like to remove'
+                     '(1 being the first item in the list)  : '))
+    user_shopping_list.remove(user_shopping_list[delete-1])
+    #total_price.remove(total_price[delete-1])
+    choice=input('Would you like to delete more things from your cart?(y/n) ')
+    if choice == 'y':
+        action3()
+    elif choice == 'n':
+        exitToMain()
 
-    #uses action4 function to print the list of items that are in the cart of the user
-    action4()
-
-    while True:
-        print('\nBe warned that all quantities of the item would be removed\n')
-        delete=int(input('Key in the number that you would like to remove'
-                         '(1 being the first item in the list)  : '))
-        user_shopping_list_dict.remove(user_shopping_list_dict[delete-1])
-        total_price.remove(total_price[delete-1])
-        choice=input('Would you like to delete more things from your cart?(y/n) ')
-        if choice == 'y':
-            action4()
-            #print(user_shopping_list_dict)
-            continue
-        else:
-            main()
-            #break
-
-#View Shopping cart
 def action4():
-    print("Price without GST\n")
-    #print(user_shopping_list_dict)
-    for key, value in user_shopping_list_dict.items():
-        print(key, "price: "+ str(value) )
-    main()
+    print("\nPrice without GST")
+    for x in range (len(user_shopping_list)):
+        print(user_shopping_list[x], "price:",  shopping_menu[user_shopping_list[x]])
+    exitToMain()
 
 #Go to checkout
 def action5():
@@ -167,30 +165,31 @@ def action5():
     totalCost = 0
 
     #calculate total cost before GST and discount
-    for key, value in user_shopping_list_dict.items():
-        totalCost = totalCost + value
+    for x in range (len(user_shopping_list)):
+        totalCost = totalCost + shopping_menu[user_shopping_list[x]]
 
     #cost of item with GST
     print("\nprice with GST")
-    for key, value in user_shopping_list_dict.items():
-        print(key, " price:"+ str(value *1.07) )
+    for x in range (len(user_shopping_list)):
+        print(user_shopping_list[x], " price:"+ str(shopping_menu[user_shopping_list[x]] *1.07) )
 
     #print total cost
     print("\ntotal cost including GST:" + str(totalCost*1.07))
-
-    #total discount
+     #total discount
     if (discount == True):
         print("\nDiscount amount:" + str(totalCost*.1))
 
     #total GST
     print("\nGST amount:" + str(totalCost * 0.07))
-
-    main()
+    exitToMain()
 
 #function to return back to main screen
 def exitToMain():
-    print("exited to main")
-    main()
+    yn = input("Go back to main menu?")
+    if yn == "y":
+        print("exited to main")
+        main()
+    else:
+        yn = input("Go back to main menu?")
 
-#call main in order to access the rest of the codes
 main()
