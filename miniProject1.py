@@ -15,9 +15,9 @@ shopping_menu= dairy|packaged_goods|canned_goods|condiments_sauces|drinks_and_be
 user_shopping_list_dict={}
 #boolean to check for discount
 discount = False
-
+#list of items
 user_shopping_list = []
-total_price=[]
+
 print("#########################")
 print("##### SHOPPING LIST #####")
 print("#########################")
@@ -48,12 +48,13 @@ def main():
         #view cart
         elif action == 4:
             action4()
+            exitToMain()
         #checkout
         elif action == 5:
             action5()
         #exit from the code if 6 is pressed
         elif action == 6:
-            break
+            exit()
         #ask for an input when the numebr is pressed wrongly
         else:
             print('Invalid number, please try again')
@@ -116,71 +117,101 @@ def action2():
     qlist=[]
     i = 0;
     while True:
-        num=input('Key the number of the item you would like to get: ')
+        item=input('Key the name of the item you would like to get: ')
         global q
         q=int(input('Key the number of the items you would like:'))
-        #user_shopping_list.append('{} x {}'.format(q,num))
-        for i in range (q):
-            user_shopping_list.append(num)
-        total_price.append(q*shopping_menu.get(num))
-        #print(user_shopping_list_dict)
+        user_shopping_list.append('{}*{}'.format(item,q))
+        #total_price.append(q*shopping_menu.get(item))
         choice=input('Would you like to add more things to your cart?(y/n) ')
         if choice == 'y':
             action2()
             continue
         elif choice == 'n':
-            exitToMain()
+            main()
             #break
 
 #Remove items
 def action3():
-    for x in range (len(user_shopping_list)):
-        print(x+1, user_shopping_list[x], "price:",  shopping_menu[user_shopping_list[x]])
-    print('\nBe warned that all quantities of the item would be removed\n')
+    #show all the items in the list
+    action4()
+    #ask for which item to be removed
     delete=int(input('Key in the number that you would like to remove'
                      '(1 being the first item in the list)  : '))
-    user_shopping_list.remove(user_shopping_list[delete-1])
-    #total_price.remove(total_price[delete-1])
-    choice=input('Would you like to delete more things from your cart?(y/n) ')
+    #ask for amount to be removed
+    delAmt = int(input('how many would you like to remove'))
+
+    #get the ammount at the start
+    startAmt = int(user_shopping_list[delete-1].split("*")[1])
+
+    #if the amount the user wants to delete is less than the current amount
+    if(delAmt < startAmt):
+        #remove that amount by replacing the amount by slicing the string and replacing the number after the*
+        user_shopping_list[delete-1] =  ('{}*{}'.format(user_shopping_list[delete-1].split("*")[0], (int(user_shopping_list[delete-1].split("*")[1]) - delAmt)))
+    else:
+        #delete the entry
+        user_shopping_list.remove(user_shopping_list[delete-1])
+
+    choice=input('Would you like to delete more things from your cart?(y/n)')
     if choice == 'y':
         action3()
     elif choice == 'n':
-        exitToMain()
+        main()
+
 
 def action4():
     print("\nPrice without GST")
+    #for every entry in list
     for x in range (len(user_shopping_list)):
-        print(user_shopping_list[x], "price:",  shopping_menu[user_shopping_list[x]])
-    exitToMain()
+        #get the name of the items by splitting the string in the list and getting the first string after splitting
+        currentItem = user_shopping_list[x].split("*")[0]
+        #calculate the price of the item by gettting the price of one item using the key and multiplying it by
+        #splitting the string in the list and getting the second value
+        currentPrice = "{:.2f}".format(float(shopping_menu[currentItem] * float(user_shopping_list[x].split("*")[1])))
+        #print value
+        print(currentItem, "x", user_shopping_list[x].split("*")[1], "price:", currentPrice)
 
 #Go to checkout
 def action5():
-
+    #input to ask if the user has a discount
     discountCheck = input("Do you have a discount y/n")
 
+    #if user has a discount
     if(discountCheck == "y"):
+        #set discount boolean to true
         discount = True
+    #otherwise
     else:
+        #set discount boolean to false
         discount = False
+    #set total cost to zero so that it doesnt add on to previous time the user checks out
     totalCost = 0
 
-    #calculate total cost before GST and discount
+    #for every entry in list
     for x in range (len(user_shopping_list)):
-        totalCost = totalCost + shopping_menu[user_shopping_list[x]]
+        #get the name of the items by splitting the string in the list and getting the first string after splitting
+        currentItem = user_shopping_list[x].split("*")[0]
+        #calculate the price of the item by gettting the price of one item using the key and multiplying it by
+        #splitting the string in the list and getting the second value
+        currentPrice = "{:.2f}".format(float(shopping_menu[currentItem] * float(user_shopping_list[x].split("*")[1])))
+        #print value
+        print(currentItem, "x", user_shopping_list[x].split("*")[1], "price:", currentPrice)
+
+        #calculate total price in the same for loop
+        totalCost = (totalCost + float(currentPrice))
 
     #cost of item with GST
-    print("\nprice with GST")
-    for x in range (len(user_shopping_list)):
-        print(user_shopping_list[x], " price:"+ str(shopping_menu[user_shopping_list[x]] *1.07) )
+    #print("\nprice with GST")
+        #print(user_shopping_list[x], " price:"+ str(shopping_menu[user_shopping_list[x]] *1.07) )
 
     #print total cost
-    print("\ntotal cost including GST:" + str(totalCost*1.07))
+    print("\ntotal cost including GST:" , "{:.2f}".format(float(totalCost*1.07)))
+
      #total discount
     if (discount == True):
-        print("\nDiscount amount:" + str(totalCost*.1))
+        print("\nAfter discount:" , "{:.2f}".format(float(totalCost*.9)))
 
     #total GST
-    print("\nGST amount:" + str(totalCost * 0.07))
+    print("\nTotal GST amount:" , "{:.2f}".format(float(totalCost * 0.07)))
     exitToMain()
 
 #function to return back to main screen

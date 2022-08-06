@@ -26,7 +26,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/GITHUB/Shopping/miniProject1.py"
+    "last_opened_file_path": "C:/Users/Anatasia Tan Wei Nee/OneDrive/others/Documents/Github/Shopping"
   }
 }]]></component>
   <component name="RunManager">
@@ -62,16 +62,5 @@
       <updated>1658742940028</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/miniProject1.py</url>
-          <line>77</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
