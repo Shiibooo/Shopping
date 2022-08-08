@@ -117,11 +117,11 @@ def action2():
     qlist=[]
     i = 0;
     while True:
-        item=input('Key the name of the item you would like to get: ')
+        itemIndex=int(input('Key the number of the item you would like to get: '))
         global q
         q=int(input('Key the number of the items you would like:'))
+        item = list(shopping_menu.keys())[itemIndex-1]
         user_shopping_list.append('{}*{}'.format(item,q))
-        #total_price.append(q*shopping_menu.get(item))
         choice=input('Would you like to add more things to your cart?(y/n) ')
         if choice == 'y':
             action2()
