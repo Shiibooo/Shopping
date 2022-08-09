@@ -20,7 +20,7 @@ user_shopping_list = []
 
 print("#########################")
 print("##### SHOPPING LIST #####")
-
+print("#########################")
 
 #main
 def main():
